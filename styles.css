@@ -1,0 +1,45 @@
+.itim-regular {
+    font-family: "Itim", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+.title {
+ font-family: Itim;
+ font-weight: 400px;
+ font-size: 60px;
+ text-align: center;
+position: relative;
+}
+
+.container {
+    font-family: Itim;
+    
+    text-align: center;
+    
+}
+
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: auto;
+}
+
+button:hover {
+    opacity: 0.8;
+  }
+
+  
+
+  .get_width {
+    float: right;
+    padding-top: 16px;
+    width: auto;
+  }
+  .mother{
+    margin: auto;
+  }
