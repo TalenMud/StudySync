@@ -4,48 +4,61 @@
     <link rel ="stylesheet" href="styles.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
-        </style>
-        
-        
-
+    </style>
 </head>
 <title>StudySync</title>
 
 <h1 class="title">StudySync</h1>
 <div class="mother">
-    <div class = 'make_group'>
-        
-          
-            <div class="container">
-              <button id="generateButton" >Make a group</button>
-            </div>
-          
-            <div class="container">
-              <span class="get_code"><a href="index.html">Already got a code?</a></span>
-              <!-- Element where the generated code will be displayed -->
-                <p id="codeDisplay"></p>
-            </div>
-          
-          <script src="main.js"></script>
-    </div>
-    </div>
+    <div class='make_group'>
+        <div class="container">
+            <label for="groupNameInput">Group Name:</label>
+            <input type="text" id="groupNameInput" placeholder="Enter your group name" />
+            <button id="generateButton">Make a group</button>
+        </div>
 
-    <script>
-      document.getElementById('generateButton').addEventListener('click', () => {
-          fetch('/generate-code')
-              .then(response => {
-                  if (!response.ok) {
-                      throw new Error('Rate limit exceeded. Please try again later.');
-                  }
-                  return response.json();
-              })
-              .then(data => {
-                  document.getElementById('codeDisplay').innerText = "Generated Code: " + data.code;
-              })
-              .catch(error => {
-                  alert(error.message);
-              });
-      });
-    </script>
+        <div class="container">
+            <span class="get_code"><a href="index.html">Already got a code?</a></span>
+            <!-- Element where the generated code will be displayed -->
+            <p id="codeDisplay"></p>
+        </div>
+
+        <script src="main.js"></script>
+    </div>
+</div>
+
+<script>
+    document.getElementById('generateButton').addEventListener('click', () => {
+        const groupName = document.getElementById('groupNameInput').value.trim(); // Trim whitespace
+
+        // Validate input
+        if (!groupName) {
+            alert('Please enter a group name.');
+            return;
+        }
+
+        fetch('/tasks', {  // Correct the endpoint to /tasks
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: groupName }) 
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('An error occurred. Please try again later.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('codeDisplay').innerText = "Your code is: " + data.code;
+            // Clear the input field after successful submission
+            document.getElementById('groupNameInput').value = '';
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+    });
+</script>
 
 </html>

@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html style="background-color: #fddebf;">
 <head>
-  <script src="main.js" type="text/javascript"></script>
-    <link rel ="stylesheet" href="styles.css">
+    <script src="main.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="styles.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
-        </style>
-        
+    </style>
 </head>
 <title>StudySync</title>
 
 <h1 class="title">StudySync</h1>
 <div class="mother">
-<div class = 'make_group'>
-    <form  >
-      
-        <div class="container">
-          <label for="Code"><b>Join Code</b></label>
-          <input style="height: 25.5px;" type="text" placeholder="Enter Code Here" name="Code" required>
-          <button onclick="GenerateRandomCode();" type="submit">Join</button>
-        </div>
-      
-        <div class="container">
-          <span class="get_code"><a href="Join.html">Need a code?</a></span>
-        </div>
-      </form>
+    <div class='make_group'>
+        <form id="joinForm">
+            <div class="container">
+                <label for="code"><b>Join Code</b></label>
+                <input style="height: 25.5px;" type="text" id="codeInput" placeholder="Enter Code Here" required>
+                <button type="submit">Join</button>
+            </div>
 
+            <div class="container">
+                <span class="get_code"><a href="Join.html">Need a code?</a></span>
+            </div>
+        </form>
+    </div>
 </div>
-</div>
+
+<script>
+    document.getElementById('joinForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const code = document.getElementById('codeInput').value.trim(); // Get the entered code
+
+        // Redirect to the tasks page for the entered code
+        if (code) {
+            window.location.href = `/tasks/view/${code}`; // Redirect to the relevant tasks page
+        } else {
+            alert('Please enter a valid code.');
+        }
+    });
+</script>
 
 </html>
