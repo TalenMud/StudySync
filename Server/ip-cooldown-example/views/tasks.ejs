@@ -11,6 +11,7 @@
 </head>
 <body>
     <h1 style="font-family: Itim;, text-align: center;"><%= group.name %> Tasks</h1>
+
     <div id="taskContainer">
         <ul>
             <% if (tasks.length === 0) { %>
@@ -29,6 +30,10 @@
                 <% }); %>
             <% } %>
         </ul>
+    </div>
+
+    <div class="add-task-box" onclick="alert('Open task creation modal or redirect to add task page')">
+        <span>Add a New Task</span>
     </div>
     <script src="main.js"></script>
 </body>
