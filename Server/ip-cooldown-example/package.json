@@ -1,9 +1,10 @@
 {
   "name": "ip-cooldown-example",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"  
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,9 @@
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^4.21.1"
+  },
+  "dev": "nodemon index.js", 
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }

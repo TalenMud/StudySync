@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background-color: #28282B;">
 <head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= group.name %> Tasks</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1><%= group.name %> Tasks</h1>
+    <h1 style="font-family: Itim;, text-align: center;"><%= group.name %> Tasks</h1>
     <div id="taskContainer">
         <ul>
             <% if (tasks.length === 0) { %>
-                <!-- Example task if no tasks are found -->
-                <li style="color: gray;">
+                <div class="task-item-example" style="background-color: #28282B;">
                     <span>Example Task</span> - 
                     <span>2024-01-01</span> - 
                     <span>Pending</span>
-                </li>
+                </div>
             <% } else { %>
                 <% tasks.forEach(task => { %>
-                    <li style="color: <%= task.color %>;">
+                    <div class="task-item" style="background-color: <%= task.color %>;">
                         <span><%= task.title %></span> - 
                         <span><%= task.date %></span> - 
                         <span><%= task.completed ? 'Completed' : 'Pending' %></span>
-                    </li>
+                    </div>
                 <% }); %>
             <% } %>
         </ul>

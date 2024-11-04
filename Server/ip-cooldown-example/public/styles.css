@@ -46,3 +46,94 @@ button:hover {
   .mother{
     margin: auto;
   }
+
+  .itim-regular {
+    font-family: "Itim", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+
+  #taskContainer {
+    width: 90%; /* For smaller screens */
+    max-width: 600px; /* Maximum width */
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #28282B;
+   
+}
+
+.task-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-item:hover {
+  transform: translateY(-3px);
+    box-shadow: 0px 6px 12px rgba(255, 255, 255, 0.788); 
+}
+
+ul {
+  list-style: none;
+}
+
+
+.task-item-example {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0px 6px 12px rgb(0, 0, 0); 
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover animation */
+.task-item-example:hover {
+  transform: translateY(-3px);
+    box-shadow: 0px 6px 12px rgba(255, 255, 255, 0.788); 
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #28282B;
+  font-family: 'Itim', cursive;
+}
+
+header {
+  width: 100%;
+  text-align: center;
+  margin: 20px 0;
+}
+
+header h1 {
+  font-size: 2em;
+  color: #333;
+}
+
+
+.task-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.task-date, .task-status {
+  font-size: 0.9em;
+  color: #eaeaea;
+  margin-top: 5px;
+}
