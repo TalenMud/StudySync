@@ -113,14 +113,14 @@ app.post('/tasks', (req, res) => {
 // Endpoint to add a task to a specific group
 app.post('/tasks/:code/task', (req, res) => {
     const { code } = req.params;
-    const { title, color, date, completed = false } = req.body; // Get task details
+    const { title, color_scheme, date, completed = false } = req.body; // Get task details
 
     const groups = loadGroups();
     const group = groups.find(g => g.code === code); // Find the group
 
     if (group) {
         const tasks = loadTasks(code); // Load existing tasks
-        const newTask = { title, color, date, completed }; // Create new task object
+        const newTask = { title, color_scheme, date, completed }; // Create new task object
         tasks.push(newTask); // Add the new task to the tasks array
 
         saveTasks(code, tasks); // Save the updated tasks for the group
