@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= user.name %>'s Settings</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Welcome to Your Settings, <%= user.name %>!</h1>
+
+    <div class="settings-container">
+        <p>Page Colour: <%= group.colour %></p>
+        <p>Notification Preferences: <%= group.notifications ? 'On' : 'Off' %></p>
+        <p>Group name: <%= group.name %></p>
+        
+        <button onclick="saveSettings()">Save Settings</button>
+    </div>
+
+    <script>
+        function saveSettings() {
+            alert('Settings saved for <%= group.name %>!');
+            // You could add JavaScript to handle saving settings here
+        }
+    </script>
+</body>
+</html>
