@@ -1,0 +1,67 @@
+body {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    min-height: 100vh;       /* Full height to vertically center */
+    margin: 0;               /* Remove default margin */
+    background-color: <%= backgroundColor %>; /* Background color from settings */
+    color: <%= textColor %>; /* Text color from settings */
+    font-family: Arial, sans-serif;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50; /* Color when checked */
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px); /* Move toggle switch when checked */
+}
+
+.settings-container {
+    display: flex;
+    flex-direction: column; /* Stacks items vertically */
+    align-items: center;    /* Centers items horizontally */
+    text-align: center;     /* Centers text within the container */
+    padding: 20px;
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

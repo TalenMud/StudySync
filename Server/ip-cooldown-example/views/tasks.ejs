@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" style="background-color: #999794;">
+
 <head>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
@@ -11,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <h1 style="font-family: Itim;, text-align: center; top: 20px;"><%= group.name %> Tasks</h1>
+    <h1 style="font-family: Itim; text-align: center; top: 20px;"><%= group.name %> Tasks</h1>
     <button class="settings-button" onclick="openSettings()">
         <i class="fas fa-cog"></i>
     </button>
@@ -20,16 +21,16 @@
         <ul>
             <% if (tasks.length === 0) { %>
                 <div class="task-item-example" style="background-color: #414147;">
-                    <span>Example Task</span> - 
-                    <span>2024-01-01</span> - 
-                    <span>Pending</span>
+                    <span class="task-title">Example Task</span> - 
+                    <span class="task-date">2024-01-01</span> - 
+                    <span class="task-status">Pending</span>
                 </div>
             <% } else { %>
                 <% tasks.forEach(task => { %>
                     <div class="task-item" > <% /* style colour is the chosen colour scheme */ %>
-                        <span><%= task.title %></span> - 
-                        <span><%= task.date %></span> - 
-                        <span><%= task.completed ? 'Completed' : 'Pending' %></span>
+                        <span class="task-title"><%= task.title %></span> - 
+                        <span class="task-date"><%= task.date %></span> - 
+                        <span class="task-status"><%= task.completed ? 'Completed' : 'Pending' %></span>
                     </div>
                 <% }); %>
             <% } %>
@@ -39,13 +40,8 @@
     <div class="add-task-box" onclick="alert('Open task creation modal or redirect to add task page')">
         <span>Add a New Task</span>
     </div>
-    <script src="main.js"></script>
-    <script>
-        function openSettings() {
-          alert('Settings clicked!');
-          // Add settings functionality here
-        }
-      </script>
+
+    <script src="/main.js"></script>
 
 </body>
 </html>

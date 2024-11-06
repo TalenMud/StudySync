@@ -1,17 +1,39 @@
+<% 
+// Split the colour scheme into two parts
+const [backgroundColor, textColor] = settings.color_scheme.split('-');
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= user.name %>'s Settings</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title><%= group.name %>'s Settings</title>
+    <link rel="stylesheet" href="/settings_styles.css">
+
+    <style>
+        /* Apply the colors dynamically */
+        body {
+            background-color: <%= backgroundColor %>; /* Background color */
+            color: <%= textColor %>; /* Text color */
+        }
+    </style>
+
 </head>
 <body>
-    <h1>Welcome to Your Settings, <%= user.name %>!</h1>
+    <h1>Welcome to Your Settings, <%= group.name %>!</h1>
 
     <div class="settings-container">
-        <p>Page Colour: <%= group.colour %></p>
-        <p>Notification Preferences: <%= group.notifications ? 'On' : 'Off' %></p>
+        <p>Page Colour: <%= settings.colour_scheme %></p>
+        
+        <div class="settings-item">
+            <label for="notifications">Notifications</label>
+            <label class="switch">
+                <input type="checkbox" id="notifications" <%= settings.notifications ? 'checked' : '' %>>
+                <span class="slider"></span>
+            </label>
+        </div>
+
         <p>Group name: <%= group.name %></p>
         
         <button onclick="saveSettings()">Save Settings</button>

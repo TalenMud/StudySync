@@ -1,10 +1,19 @@
+const { error } = require('console');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const PORT = process.env.PORT || 3000;
 const groupsFilePath = path.join(__dirname, 'groups.json'); // File for groups
 const tasksDir = path.join(__dirname, 'tasks'); // Directory for task files
+const settingsDir = path.join(__dirname, 'settings');
 const app = express();
+const groupCreationLog = new Map(); // Map of userId -> [{ timestamp }]
+const MaxGroups = 5; // Maximum allowed groups within 30 minutes
+const THIRTY_MINUTES = 30 * 60 * 1000; // Milliseconds in 30 minutes
+const defaultSettings = {
+    color_scheme: '#999794-#333',
+    notifications: false
+};
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +34,10 @@ if (!fs.existsSync(tasksDir)) {
     fs.mkdirSync(tasksDir); // Create tasks directory if it doesn't exist
 }
 
+if (!fs.existsSync(settingsDir)) {
+    fs.mkdirSync(settingsDir); 
+}
+
 // Function to load all groups from the groups.json file
 function loadGroups() {
     try {
@@ -39,6 +52,11 @@ function loadGroups() {
 // Function to save groups back to the groups.json file
 function saveGroups(groups) {
     fs.writeFileSync(groupsFilePath, JSON.stringify({ groups }, null, 2)); // Save the updated groups
+}
+
+function saveSettings(code, settings) {
+    const filePath = path.join(tasksDir, `${code}-settings.json`); // File path based on code
+    fs.writeFileSync(filePath, JSON.stringify(settings, null, 2)); // Save tasks as JSON
 }
 
 // Function to save tasks to a specific file
@@ -62,6 +80,43 @@ function loadTasks(code) {
     return []; // Return an empty array if no tasks file exists
 }
 
+function loadSettings(code) {
+    const filePath = path.join(tasksDir, `${code}-settings.json`); // File path based on code
+    if (fs.existsSync(filePath)) {
+        try {
+            const fileData = fs.readFileSync(filePath, 'utf-8'); // Read settings file
+            return JSON.parse(fileData); // Parse and return settings if found
+        } catch (error) {
+            console.error(`Error reading settings for group ${code}:`, error);
+            saveSettings(code, defaultSettings);
+            return { ...defaultSettings }; // Return defaults if an error occurs
+        }
+    } else {
+        // If the settings file doesn't exist, create it with default settings
+        saveSettings(code, defaultSettings);
+        return { ...defaultSettings }; 
+    }
+}
+
+
+function logGroupCreation(req) {
+    const now = Date.now();
+    const ip = req.ip
+    // Get existing log or initialize a new one
+    let userLog = groupCreationLog.get(ip) || [];
+    
+    // Remove entries older than 30 minutes
+    userLog = userLog.filter(timestamp => now - timestamp < THIRTY_MINUTES);
+    
+    // Add the new group creation time to the log
+    userLog.push(now);
+    
+    // Update the map
+    groupCreationLog.set(ip, userLog);
+    
+    // Return the count of groups created in the last 30 minutes
+    return userLog.length;
+}
 
 // Function to generate a random code
 function GenerateRandomCode(length = 8) {
@@ -87,10 +142,61 @@ app.get('/tasks/view/:code', (req, res) => {
     }
 });
 
+app.get('/settings/view/:code', (req, res) => {
+    const { code } = req.params;
+    const settings = loadSettings(code); // Load tasks for the group
+    const groups = loadGroups(); // Load all groups to find the specific group by code
+    const group = groups.find(g => g.code === code); // Find the group object using the code
+    
+    if(group) {
+        console.log("Group found", group)
+        res.render('settings', { group, settings}); // Render the tasks page with group and tasks data
+    } else{
+        res.status(404).send('Ground not found');
+    }
+    
+});
+
+app.get('/settings/data/:code', (req, res) => {
+    const { code } = req.params;
+    const settings = loadSettings(code); // Load settings for the given code
+
+    if (settings) {
+        res.json(settings); // Send settings data as JSON
+    } else {
+        res.status(404).json({ error: 'Settings not found' }); // Return 404 if no settings exist
+    }
+});
+
+app.post('/settings/update/:code', (req, res) => {
+    const { code } = req.params;
+    const { notifications } = req.body; // Get updated notifications value
+    const { colourScheme } = req.body;
+    const settings = loadSettings(code); // Load current settings for the code
+
+    // Update the notifications setting
+    settings.notifications = notifications;
+
+    //Change the colour scheme accordingly
+    settings.color_scheme = colourScheme;
+
+    // Save the updated settings
+    saveSettings(code, settings);
+
+    res.json({ success: true, settings }); // Respond with updated settings
+});
+
 // Endpoint to create a new group
 app.post('/tasks', (req, res) => {
     const { name } = req.body; // Get the group name from the request body
     let code = GenerateRandomCode(); // Generate a unique code
+    const ip = req.ip
+
+    const recentGroupCount = logGroupCreation(ip);
+
+    if (recentGroupCount > MaxGroups){
+        return res.status(429).json({error: 'Too many groups created. Try again later.'})
+    }
 
     const groups = loadGroups(); // Load existing groups
 

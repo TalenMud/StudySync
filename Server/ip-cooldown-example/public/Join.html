@@ -7,7 +7,7 @@
     </style>
 </head>
 <title>StudySync</title>
-
+<body style="background-color:#fddebf;">
 <h1 class="title">StudySync</h1>
 <div class="mother">
     <div class='make_group'>
@@ -45,6 +45,11 @@
             body: JSON.stringify({ name: groupName }) 
         })
         .then(response => {
+            if (response.status === 429) {
+            return response.json().then(data => {
+                throw new Error(data.error); // Pass the specific error message from backend
+            });
+        }
             if (!response.ok) {
                 throw new Error('An error occurred. Please try again later.');
             }
@@ -60,5 +65,5 @@
         });
     });
 </script>
-
+</body>
 </html>
