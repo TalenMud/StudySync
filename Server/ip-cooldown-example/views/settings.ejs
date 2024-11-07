@@ -10,6 +10,9 @@ const [backgroundColor, textColor] = settings.color_scheme.split('-');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= group.name %>'s Settings</title>
     <link rel="stylesheet" href="/settings_styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+    </style>
 
     <style>
         /* Apply the colors dynamically */
@@ -21,29 +24,38 @@ const [backgroundColor, textColor] = settings.color_scheme.split('-');
 
 </head>
 <body>
-    <h1>Welcome to Your Settings, <%= group.name %>!</h1>
-
-    <div class="settings-container">
-        <p>Page Colour: <%= settings.colour_scheme %></p>
+    <div class="page-container"> <!-- New wrapper div to apply centering flexbox -->
+        <h1 class="title">Settings for <%= group.name %>!</h1>
         
-        <div class="settings-item">
-            <label for="notifications">Notifications</label>
-            <label class="switch">
-                <input type="checkbox" id="notifications" <%= settings.notifications ? 'checked' : '' %>>
-                <span class="slider"></span>
-            </label>
+        <div class="settings-container">
+            <h2>Color Scheme: <span id="colorSchemeName"><%= currentColorName %></span></h2>
+
+            <div class="color-controls">
+                <button id="prevColorBtn">◀</button>
+                <button id="nextColorBtn">▶</button>
+            </div>
+            
+            <div class="settings-item">
+                <label for="notifications">Notifications</label>
+                <label class="switch">
+                    <input type="checkbox" id="notifications" <%= settings.notifications ? 'checked' : '' %>>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <p>Group name: <%= group.name %></p>
+            
+            <button onclick="saveSettings()">Save Settings</button>
         </div>
-
-        <p>Group name: <%= group.name %></p>
-        
-        <button onclick="saveSettings()">Save Settings</button>
     </div>
-
-    <script>
-        function saveSettings() {
-            alert('Settings saved for <%= group.name %>!');
-            // You could add JavaScript to handle saving settings here
-        }
-    </script>
 </body>
+
+<script>
+    // Embed data attributes for use in main.js
+    window.colorSchemes = JSON.stringify(colorSchemes);
+    window.currentColorName = "<%= currentColorName %>";
+</script>
+<script src="/main.js"></script>
+
+
 </html>

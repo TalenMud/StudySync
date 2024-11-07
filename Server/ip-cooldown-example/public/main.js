@@ -36,3 +36,34 @@ function saveSettings() {
     });
 
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const colorSchemes = window.colorSchemes; // Array of color schemes
+    let currentColorIndex = colorSchemes.findIndex(scheme => scheme.name === window.currentColorName); // Start at current scheme
+
+    const colorSchemeNameEl = document.getElementById("colorSchemeName");
+    const prevColorBtn = document.getElementById("prevColorBtn");
+    const nextColorBtn = document.getElementById("nextColorBtn");
+
+    function applyColorScheme(index) {
+        const scheme = colorSchemes[index];
+        const [backgroundColor, textColor] = scheme.hex.split('-');
+        document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
+        colorSchemeNameEl.innerText = scheme.name;
+    }
+
+    // Initial color scheme application
+    applyColorScheme(currentColorIndex);
+
+    // Event listeners for buttons
+    prevColorBtn.addEventListener("click", () => {
+        currentColorIndex = (currentColorIndex - 1 + colorSchemes.length) % colorSchemes.length;
+        applyColorScheme(currentColorIndex);
+    });
+
+    nextColorBtn.addEventListener("click", () => {
+        currentColorIndex = (currentColorIndex + 1) % colorSchemes.length;
+        applyColorScheme(currentColorIndex);
+    });
+});

@@ -11,9 +11,14 @@ const groupCreationLog = new Map(); // Map of userId -> [{ timestamp }]
 const MaxGroups = 5; // Maximum allowed groups within 30 minutes
 const THIRTY_MINUTES = 30 * 60 * 1000; // Milliseconds in 30 minutes
 const defaultSettings = {
-    color_scheme: '#999794-#333',
     notifications: false
 };
+// Example arrays for color schemes
+const colorSchemes = [
+    { name: "gray-black", hex: "#999794-#333" },
+    { name: "blue-navy", hex: "#87CEFA-#1E3A5F" },
+    { name: "green-olive", hex: "#8FBC8F-#556B2F" }
+];
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -149,12 +154,17 @@ app.get('/settings/view/:code', (req, res) => {
     const group = groups.find(g => g.code === code); // Find the group object using the code
     
     if(group) {
-        console.log("Group found", group)
-        res.render('settings', { group, settings}); // Render the tasks page with group and tasks data
-    } else{
-        res.status(404).send('Ground not found');
+        const currentColorScheme = colorSchemes.find(scheme => scheme.hex === settings.color_scheme) || colorSchemes[0];
+        
+        res.render('settings', {
+            group,
+            settings,
+            colorSchemes,
+            currentColorName: currentColorScheme.name // current color name
+        });
+    } else {
+        res.status(404).send('Group not found');
     }
-    
 });
 
 app.get('/settings/data/:code', (req, res) => {
@@ -171,14 +181,13 @@ app.get('/settings/data/:code', (req, res) => {
 app.post('/settings/update/:code', (req, res) => {
     const { code } = req.params;
     const { notifications } = req.body; // Get updated notifications value
-    const { colourScheme } = req.body;
     const settings = loadSettings(code); // Load current settings for the code
 
     // Update the notifications setting
     settings.notifications = notifications;
 
     //Change the colour scheme accordingly
-    settings.color_scheme = colourScheme;
+   
 
     // Save the updated settings
     saveSettings(code, settings);
